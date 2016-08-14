@@ -1,0 +1,12 @@
+FROM golang:1.6.3-alpine
+
+ENV FIZZ_BUZZ_SRC_DIR /go/src/github.com/thomas-mullaly/go-fizzbuzz
+
+ADD . $FIZZ_BUZZ_SRC_DIR
+
+WORKDIR $FIZZ_BUZZ_SRC_DIR
+
+RUN go install github.com/thomas-mullaly/go-fizzbuzz \
+	&& chmod +x hack/*.sh
+
+ENTRYPOINT ["/bin/sh"]
