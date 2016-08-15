@@ -23,19 +23,11 @@ var _ = Describe("SingleModuloRule", func() {
 
 	Describe("Applies", func() {
 		It("Should return false if value is not divisble", func() {
-			Expect(rule.Applies(6)).To(Equal(false))
+			Expect(rule.Applies(5)).To(Equal(false))
+		})
+
+		It("Should return true if value is divisible", func() {
+			Expect(rule.Applies(6)).To(Equal(true))
 		})
 	})
 })
-
-func TestSingleModuloRuleAppliesReturnsTrueIfDivisible(t *testing.T) {
-	rule := NewSingleModuloRule(3, "Fizz")
-
-	if rule.Applies(6) != true {
-		t.Fatal("Expected true but got false instead")
-	}
-}
-
-func TestSingleModuloRuleAppliesReturnsFalseIfNotDivisible(t *testing.T) {
-
-}

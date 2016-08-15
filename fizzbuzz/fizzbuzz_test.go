@@ -1,86 +1,77 @@
 package fizzbuzz
 
-import "testing"
+import (
+	"testing"
 
-func verifyFizzBuzzResults(actual []string, expected []string, t *testing.T) {
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+)
+
+func TestFizzBuzz(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Rules Suite")
+}
+
+func verifyFizzBuzzResults(actual []string, expected []string) {
 	expectedLen := len(expected)
 	actualLen := len(actual)
 
-	if actualLen != expectedLen {
-		t.Fatalf("Expected %d results but got %d", expectedLen, actualLen)
-	}
+	Expect(actualLen).To(Equal(expectedLen))
 
 	for index, value := range expected {
-		if actual[index] != value {
-			t.Fatalf("Expected '%s' at index %d but got '%s'", value, index, actual[index])
-		}
+		Expect(actual[index]).To(Equal(value))
 	}
 }
 
-func TestReturnFizzForNumbersDivisbleByThree(t *testing.T) {
-	fizz := NewFizzBuzz()
+var _ = Describe("FizzBuzz", func() {
+	var (
+		fizzBuzz *FizzBuzz
+	)
 
-	numRange := Range{Start: 3, End: 4}
+	BeforeEach(func() {
+		fizzBuzz = NewFizzBuzz()
+	})
 
-	result, err := fizz.Run(numRange)
+	Describe("Run", func() {
+		It("Should return Fizz for numbers divisible by three", func() {
+			numRange := Range{Start: 3, End: 4}
 
-	if err != nil {
-		t.Fatalf("Expected err to be nil but was %s instead", err)
-	}
+			result, _ := fizzBuzz.Run(numRange)
 
-	verifyFizzBuzzResults(result, []string{"Fizz"}, t)
-}
+			verifyFizzBuzzResults(result, []string{"Fizz"})
+		})
 
-func TestReturnActualNumberWhenNotDivisbleByThree(t *testing.T) {
-	fizz := NewFizzBuzz()
+		It("Should return actual number when not divisible by three or five", func() {
+			numRange := Range{Start: 2, End: 3}
 
-	numRange := Range{Start: 2, End: 3}
+			result, _ := fizzBuzz.Run(numRange)
 
-	result, err := fizz.Run(numRange)
+			verifyFizzBuzzResults(result, []string{"2"})
+		})
 
-	if err != nil {
-		t.Fatalf("Expected err to be nil but was %s instead", err)
-	}
+		It("Should return Buzz when number is divisible by five", func() {
+			numRange := Range{Start: 5, End: 6}
 
-	verifyFizzBuzzResults(result, []string{"2"}, t)
-}
+			result, _ := fizzBuzz.Run(numRange)
 
-func TestReturnBuzzWhenNumberIsDivisbleByFive(t *testing.T) {
-	fizz := NewFizzBuzz()
+			verifyFizzBuzzResults(result, []string{"Buzz"})
+		})
 
-	numRange := Range{Start: 5, End: 6}
+		It("Should return FizzBuzz when number is divisible by three and five", func() {
+			numRange := Range{Start: 15, End: 16}
 
-	result, err := fizz.Run(numRange)
+			result, _ := fizzBuzz.Run(numRange)
 
-	if err != nil {
-		t.Fatalf("Expected err to be nil but was %s instead", err)
-	}
+			verifyFizzBuzzResults(result, []string{"FizzBuzz"})
+		})
 
-	verifyFizzBuzzResults(result, []string{"Buzz"}, t)
-}
+		It("Should return error when Start is greater than End", func() {
+			numRange := Range{Start: 2, End: 1}
 
-func TestReturnErrIfStartIsGreaterThanEnd(t *testing.T) {
-	fizz := NewFizzBuzz()
+			result, err := fizzBuzz.Run(numRange)
 
-	numRange := Range{Start: 2, End: 1}
-
-	result, err := fizz.Run(numRange)
-
-	if result != nil {
-		t.Fatal("Expected result to be nil")
-	}
-
-	if err == nil {
-		t.Fatalf("Expected err to not be nil")
-	}
-}
-
-func TestReturnFizzBuzzIfNumberIsDivisibleByThreeAndFive(t *testing.T) {
-	fizz := NewFizzBuzz()
-
-	numRange := Range{Start: 15, End: 16}
-
-	result, _ := fizz.Run(numRange)
-
-	verifyFizzBuzzResults(result, []string{"FizzBuzz"}, t)
-}
+			Expect(result).To(BeEmpty())
+			Expect(err).ToNot(Equal(nil))
+		})
+	})
+})
