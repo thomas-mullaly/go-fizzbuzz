@@ -30,4 +30,34 @@ var _ = Describe("SingleModuloRule", func() {
 			Expect(rule.Applies(6)).To(Equal(true))
 		})
 	})
+
+	Describe("Result", func() {
+		It("Should return 'Fizz'", func() {
+			Expect(rule.Result(1)).To(Equal("Fizz"))
+		})
+	})
+})
+
+var _ = Describe("NumberEchoRule", func() {
+	var (
+		rule *NumberEchoRule
+	)
+
+	BeforeEach(func() {
+		rule = &NumberEchoRule{}
+	})
+
+	Describe("Applies", func() {
+		It("Should always return true", func() {
+			Expect(rule.Applies(1)).To(Equal(true))
+			Expect(rule.Applies(3)).To(Equal(true))
+		})
+	})
+
+	Describe("Result", func() {
+		It("Should return string form of input", func() {
+			Expect(rule.Result(13)).To(Equal("13"))
+			Expect(rule.Result(2)).To(Equal("2"))
+		})
+	})
 })
