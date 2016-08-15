@@ -38,6 +38,32 @@ var _ = Describe("SingleModuloRule", func() {
 	})
 })
 
+var _ = Describe("DoubleModuloRule", func() {
+	var (
+		rule *DoubleModuloRule
+	)
+
+	BeforeEach(func() {
+		rule = NewDoubleModuloRule(3, 5, "FizzBuzz")
+	})
+
+	Describe("Applies", func() {
+		It("Should return false if number is not divisible by three and five", func() {
+			Expect(rule.Applies(12)).To(Equal(false))
+		})
+
+		It("Should return true if number is divisible by three and five", func() {
+			Expect(rule.Applies(15)).To(Equal(true))
+		})
+	})
+
+	Describe("Result", func() {
+		It("Should return FizzBuzz", func() {
+			Expect(rule.Result(15)).To(Equal("FizzBuzz"))
+		})
+	})
+})
+
 var _ = Describe("NumberEchoRule", func() {
 	var (
 		rule *NumberEchoRule
