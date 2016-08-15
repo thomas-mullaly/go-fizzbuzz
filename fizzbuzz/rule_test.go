@@ -23,7 +23,7 @@ var _ = Describe("SingleModuloRule", func() {
 
 	Describe("Applies", func() {
 		It("Should return false if value is not divisble", func() {
-			Expect(rule.Applies(6)).To(Equal(true))
+			Expect(rule.Applies(6)).To(Equal(false))
 		})
 	})
 })

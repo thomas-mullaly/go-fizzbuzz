@@ -7,6 +7,7 @@ ADD . $FIZZ_BUZZ_SRC_DIR
 WORKDIR $FIZZ_BUZZ_SRC_DIR
 
 RUN go install github.com/thomas-mullaly/go-fizzbuzz \
+	&& apk add --no-cache bash \
 	&& chmod +x hack/*.sh
 
-ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/bin/bash"]
