@@ -1,20 +1,26 @@
 package fizzbuzz
 
-import (
-	"fmt"
-	"strconv"
-)
+import "fmt"
 
 // Range used by FizzBuzz program
 type Range struct {
 	Start, End int
 }
 
-type FizzBuzz struct{}
+type FizzBuzz struct {
+	rules []Rule
+}
 
 // NewFizzBuzz creates a new FizzBuzz object
 func NewFizzBuzz() *FizzBuzz {
-	return &FizzBuzz{}
+	return &FizzBuzz{
+		rules: []Rule{
+			NewDoubleModuloRule(3, 5, "FizzBuzz"),
+			NewSingleModuloRule(3, "Fizz"),
+			NewSingleModuloRule(5, "Buzz"),
+			&NumberEchoRule{},
+		},
+	}
 }
 
 // Run runs the fizzbuzz logic on the given range
@@ -29,14 +35,11 @@ func (fb *FizzBuzz) Run(r Range) ([]string, error) {
 
 	for i := r.Start; i < r.End; i++ {
 		value := ""
-		if i%3 == 0 && i%5 == 0 {
-			value = "FizzBuzz"
-		} else if i%3 == 0 {
-			value = "Fizz"
-		} else if i%5 == 0 {
-			value = "Buzz"
-		} else {
-			value = strconv.Itoa(i)
+		for _, rule := range fb.rules {
+			if rule.Applies(i) {
+				value = rule.Result(i)
+				break
+			}
 		}
 
 		output = append(output, value)
